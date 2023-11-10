@@ -1,0 +1,26 @@
+[project]
+name = "aoc23"
+version = "1.0.0"
+description = "Advent of Code 2023"
+authors = [{ name = "Axel Pettersson", email = "axel@pettersson.cc" }]
+
+[project.optional-dependencies]
+dev = ["flake8==6.1.0", "black==23.11.0", "isort==5.12.0", "mypy==1.7.0"]
+
+[tool.isort]
+profile = "black"
+
+[tool.mypy]
+warn_unused_configs = true
+disallow_any_generics = true
+disallow_subclassing_any = true
+disallow_untyped_calls = true
+disallow_untyped_defs = true
+disallow_incomplete_defs = true
+check_untyped_defs = true
+disallow_untyped_decorators = true
+no_implicit_optional = true
+warn_redundant_casts = true
+warn_return_any = true
+implicit_reexport = false
+strict_equality = true
