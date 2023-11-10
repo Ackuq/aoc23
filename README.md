@@ -1,5 +1,23 @@
 # Advent of Code 2023
 
+This repository contains my solutions for [Advent of Code 2023](https://adventofcode.com/2023).
+
+## Running
+
+The following script can be used for running the solution for each day:
+
+```sh
+python -m aoc23 --day DAY [--example EXAMPLE] [--strip]
+```
+
+For example, if we want to run the solution for day 12, the command would be:
+
+```sh
+python -m aoc23 --day 12
+```
+
+## Days
+
 - [ ] [Day 1](./aoc23/day1/solution.py)
 - [ ] [Day 2](./aoc23/day2/solution.py)
 - [ ] [Day 3](./aoc23/day3/solution.py)
