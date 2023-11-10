@@ -1,17 +1,23 @@
+import os
 from typing import List, Optional
 
 
-def read_input(
-    day: int,
-    example: bool = False,
-    example_num: Optional[int] = None,
-    strip: bool = False,
+def get_directory(file: str) -> str:
+    return os.path.dirname(os.path.realpath(file))
+
+
+def get_input(
+    directory: str,
+    example: Optional[int] = None,
+    strip: bool = True,
 ) -> List[str]:
-    name = f"{day}" if not example else f"{day}_example"
-    if example_num is not None:
-        name += f"_{example_num}"
-    f = open(f"./inputs/{name}.txt")
-    lines = f.readlines()
+    filename = (
+        f"{directory}/example{example}.txt"
+        if example is not None
+        else f"{directory}/problem.txt"
+    )
+    file = open(filename)
+    lines = file.readlines()
     if strip:
         lines = [line.strip() for line in lines]
     return lines
