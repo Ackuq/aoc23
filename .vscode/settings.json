@@ -12,5 +12,6 @@
   "isort.importStrategy": "fromEnvironment",
   "flake8.importStrategy": "fromEnvironment",
   "black-formatter.importStrategy": "fromEnvironment",
-  "mypy-type-checker.importStrategy": "fromEnvironment"
+  "mypy-type-checker.importStrategy": "fromEnvironment",
+  "python.terminal.activateEnvironment": true
 }
