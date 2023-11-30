@@ -7,6 +7,8 @@ This repository contains my solutions for [Advent of Code 2023](https://adventof
 ### Prerequisites
 
 ```sh
+python -m venv venv
+source venv/bin/activate
 pip install -r requirements.txt
 ```
 
