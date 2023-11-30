@@ -2,6 +2,28 @@
 
 This repository contains my solutions for [Advent of Code 2023](https://adventofcode.com/2023).
 
+## Development
+
+### Prerequisites
+
+```sh
+pip install -r requirements.txt
+```
+
+### Formatting
+
+```sh
+black .
+isort .
+```
+
+### Linting
+
+```sh
+flake8 .
+mypy .
+```
+
 ## Running
 
 The following script can be used for running the solution for each day:
