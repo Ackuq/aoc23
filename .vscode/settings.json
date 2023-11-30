@@ -6,6 +6,9 @@
       "source.organizeImports": true
     }
   },
+  "github.copilot.enable": {
+    "python": false
+  },
   "isort.importStrategy": "fromEnvironment",
   "flake8.importStrategy": "fromEnvironment",
   "black-formatter.importStrategy": "fromEnvironment",
