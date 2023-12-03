@@ -14,7 +14,7 @@ initial: Bag = {
 }
 
 
-def part1(games: List[Game]) -> int:
+def part1(games: List[Game]) -> None:
     def is_valid_set(bag: Bag) -> bool:
         return all(bag[cube] <= initial[cube] for cube in bag)
 
@@ -26,7 +26,7 @@ def part1(games: List[Game]) -> int:
     print(f"Part 1: {result}")
 
 
-def part2(games: List[Game]) -> int:
+def part2(games: List[Game]) -> None:
     def reduce(prev: Bag, bag: Bag) -> Bag:
         return {
             "red": max(prev["red"], bag["red"]),
@@ -34,16 +34,14 @@ def part2(games: List[Game]) -> int:
             "blue": max(prev["blue"], bag["blue"]),
         }
 
+    initial: Bag = {
+        "red": 0,
+        "green": 0,
+        "blue": 0,
+    }
+
     def get_min_bag_sum(game: Game) -> int:
-        min_bag = functools.reduce(
-            reduce,
-            game,
-            {
-                "red": 0,
-                "green": 0,
-                "blue": 0,
-            },
-        )
+        min_bag = functools.reduce(reduce, game, initial)
         return min_bag["blue"] * min_bag["green"] * min_bag["red"]
 
     result = sum([get_min_bag_sum(game) for game in games])
