@@ -43,9 +43,9 @@ python -m aoc23 --day 12
 ## Days
 
 - [x] [Day 1](./aoc23/day1/solution.py)
-- [ ] [Day 2](./aoc23/day2/solution.py)
-- [ ] [Day 3](./aoc23/day3/solution.py)
-- [ ] [Day 4](./aoc23/day4/solution.py)
+- [x] [Day 2](./aoc23/day2/solution.py)
+- [x] [Day 3](./aoc23/day3/solution.py)
+- [x] [Day 4](./aoc23/day4/solution.py)
 - [ ] [Day 5](./aoc23/day5/solution.py)
 - [ ] [Day 6](./aoc23/day6/solution.py)
 - [ ] [Day 7](./aoc23/day7/solution.py)
