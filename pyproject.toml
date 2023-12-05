@@ -4,9 +4,6 @@ version = "1.0.0"
 description = "Advent of Code 2023"
 authors = [{ name = "Axel Pettersson", email = "axel@pettersson.cc" }]
 
-[project.optional-dependencies]
-dev = ["flake8==6.1.0", "black==23.11.0", "isort==5.12.0", "mypy==1.7.0"]
-
 [tool.isort]
 profile = "black"
 

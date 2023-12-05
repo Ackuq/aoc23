@@ -2,3 +2,5 @@ flake8==6.1.0
 black==23.11.0
 isort==5.12.0
 mypy==1.7.0
+tqdm==4.66.1
+types-tqdm==4.66.0.5
