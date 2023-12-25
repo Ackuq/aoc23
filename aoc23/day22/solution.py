@@ -5,48 +5,39 @@ def range_intersection(a: range, b: range) -> bool:
     return bool(range(max(a.start, b.start), min(a.stop, b.stop)))
 
 
-class Brick:
-    def __init__(self, x: range, y: range, z: range) -> None:
-        self.x = x
-        self.y = y
-        self.z = z
-
-    def fall_down(self) -> "Brick":
-        return Brick(self.x, self.y, range(self.z.start - 1, self.z.stop - 1))
-
-    def intersects(self, other: "Brick") -> bool:
-        return (
-            range_intersection(self.x, other.x)
-            and range_intersection(self.y, other.y)
-            and range_intersection(self.z, other.z)
-        )
-
-    def is_directly_above(self, other: "Brick") -> bool:
-        return (
-            range_intersection(self.x, other.x)
-            and range_intersection(self.y, other.y)
-            and self.z.start == other.z.stop
-        )
-
-    def is_directly_below(self, other: "Brick") -> bool:
-        return (
-            range_intersection(self.x, other.x)
-            and range_intersection(self.y, other.y)
-            and self.z.stop == other.z.start
-        )
-
-    def __repr__(self) -> str:
-        return f"Brick(x={self.x}, y={self.y}, z={self.z})\n"
-
-    def __hash__(self) -> int:
-        return hash((self.x, self.y, self.z))
+Brick = Tuple[range, range, range]
 
 
-Bricks = List[Brick]
+def brick_fall_down(brick: Brick) -> Brick:
+    return (brick[0], brick[1], range(brick[2].start - 1, brick[2].stop - 1))
 
 
-def parse_input(input: List[str]) -> Bricks:
-    bricks: Bricks = []
+def intersects(brick1: Brick, brick2: Brick) -> bool:
+    return (
+        range_intersection(brick1[0], brick2[0])
+        and range_intersection(brick1[1], brick2[1])
+        and range_intersection(brick1[2], brick2[2])
+    )
+
+
+def is_directly_above(brick1: Brick, brick2: Brick) -> bool:
+    return (
+        range_intersection(brick1[0], brick2[0])
+        and range_intersection(brick1[1], brick2[1])
+        and brick1[2].start == brick2[2].stop
+    )
+
+
+def is_directly_below(brick1: Brick, brick2: Brick) -> bool:
+    return (
+        range_intersection(brick1[0], brick2[0])
+        and range_intersection(brick1[1], brick2[1])
+        and brick1[2].stop == brick2[2].start
+    )
+
+
+def parse_input(input: List[str]) -> List[Brick]:
+    bricks: List[Brick] = []
 
     for line in input:
         parts = line.strip().split("~")
@@ -55,7 +46,7 @@ def parse_input(input: List[str]) -> Bricks:
         x2, y2, z2 = parts[1].split(",")
 
         bricks.append(
-            Brick(
+            (
                 range(int(x1), int(x2) + 1),
                 range(int(y1), int(y2) + 1),
                 range(int(z1), int(z2) + 1),
@@ -65,23 +56,23 @@ def parse_input(input: List[str]) -> Bricks:
     return bricks
 
 
-def fall_down(bricks: Bricks) -> Tuple[Bricks, bool]:
+def fall_down(bricks: List[Brick]) -> Tuple[List[Brick], bool]:
     # Make brick fall down if not
     # 1. Its on the ground
     # 2. It intersects with another brick
 
-    new_bricks: Bricks = []
+    new_bricks: List[Brick] = []
     did_change = False
     for brick in bricks:
-        if brick.z.start == 0:
+        if brick[2].start == 0:
             new_bricks.append(brick)
             continue
-        next_brick = brick.fall_down()
+        next_brick = brick_fall_down(brick)
         does_intersect = False
         for other in bricks:
             if brick == other:
                 continue
-            if next_brick.intersects(other):
+            if intersects(brick, other):
                 does_intersect = True
                 break
         if not does_intersect:
@@ -96,7 +87,7 @@ def fall_down(bricks: Bricks) -> Tuple[Bricks, bool]:
 SupportMap = Dict[Brick, Set[Brick]]
 
 
-def get_support_map(bricks: Bricks) -> Tuple[SupportMap, SupportMap]:
+def get_support_map(bricks: List[Brick]) -> Tuple[SupportMap, SupportMap]:
     # For each brick, find all bricks that support it
     support_map: SupportMap = {}
     supported_by: SupportMap = {}
@@ -106,21 +97,17 @@ def get_support_map(bricks: Bricks) -> Tuple[SupportMap, SupportMap]:
         for other in bricks:
             if brick == other:
                 continue
-            if brick.is_directly_above(other):
+            if is_directly_above(brick, other):
                 supported_by[brick].add(other)
-            if brick.is_directly_below(other):
+            if is_directly_below(brick, other):
                 support_map[brick].add(other)
 
     return support_map, supported_by
 
 
-def part1(bricks: Bricks) -> None:
-    did_change = True
-    while did_change:
-        bricks, did_change = fall_down(bricks)
-
-    support_map, supported_by = get_support_map(bricks)
-
+def part1(
+    bricks: List[Brick], support_map: SupportMap, supported_by: SupportMap
+) -> None:
     count = 0
     # Find bricks that either does not support any other brick
     # or support bricks that are supported by other bricks
@@ -136,6 +123,33 @@ def part1(bricks: Bricks) -> None:
     print("Part 1:", count)
 
 
-def main(lines: List[str]) -> None:
-    input = parse_input(lines)
-    part1(input)
+def part2(
+    bricks: List[Brick], support_map: SupportMap, supported_by: SupportMap
+) -> None:
+    count = 0
+    for brick in bricks:
+        # Keep track of bricks that have fallen / been removed
+        fallen = {brick}
+        possible_fallers = set(support_map[brick])
+        while len(possible_fallers) > 0:
+            # Get the next brick that could fall
+            next_faller = possible_fallers.pop()
+            # If it has already fallen, continue
+            if next_faller in fallen:
+                continue
+            # Check if it is supported by any bricks that have not fallen
+            if all(support in fallen for support in supported_by[next_faller]):
+                fallen.add(next_faller)
+                possible_fallers.update(support_map[next_faller])
+        count += len(fallen) - 1
+    print("Part 2:", count)
+
+
+def main(lines: List[str]) -> None:  #
+    bricks = parse_input(lines)
+    did_change = True
+    while did_change:
+        bricks, did_change = fall_down(bricks)
+    support_map, supported_by = get_support_map(bricks)
+    part1(bricks, support_map, supported_by)
+    part2(bricks, support_map, supported_by)
