@@ -64,7 +64,7 @@ def part1(hailstones: Input) -> None:
             if intersect(hailstone, other):
                 count += 1
 
-    print(count)
+    print("Part 1:", count)
 
 
 def main(lines: List[str]) -> None:
